@@ -68,10 +68,7 @@ for (i in 1:cnt )
                
       else { activity$steps[i] <- 0 }
    }
-   
 }
-
-## no_miss <- apply(is.na(activity), 2, sum)
 
 ## Summarize by day with revised data
 act_by_day_i <- summarize(group_by(activity, date), day_steps = sum(steps))
