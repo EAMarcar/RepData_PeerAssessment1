@@ -109,11 +109,10 @@ qplot(act_by_day_i$day_steps, geom="histogram",main = "Total Steps per Day(imput
 ## Using the data with imputed missing values, create factor variable for weekend/weekday
 
 activity$day <- weekdays(as.POSIXlt(activity$date))
-act_wkdy <- mutate(activity, wkdy = ifelse(day == "Sunday" | day == "Saturday", "Weekend", 
-                                    ifelse( day == "Monday" | day == "Tuesday" | day == "Wednesday" | 
-                                          day == "Thursday" | day == "Friday", "Weekday", 0)))
-act_wkdy$wkdy <- factor(act_wkdy$wkdy)
-act_wkdy_int <- summarize(group_by(act_wkdy, interval, wkdy), day_steps = mean(steps, na.rm=TRUE))
+activity$wkdy <- "Weekday"
+activity$wkdy[activity$day == "Saturday" | activity$day == "Sunday"] <- "Weekend"
+
+act_wkdy_int <- summarize(group_by(activity, interval, wkdy), day_steps = mean(steps, na.rm=TRUE))
 
 ggplot(act_wkdy_int, aes(interval,day_steps)) + geom_line() + facet_grid(wkdy ~ . ) + 
       labs(y = "Number of Steps") + ggtitle("Average Steps by Interval - Comparing Weekday to Weekend")
